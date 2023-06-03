@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import CalendarBox from './Gadgets/Calendar'
+import CalendarBox from './Gadgets/Calendar/Calendar'
+import Notes from './Gadgets/Notes/Notes'
 import './App.css'
 
 function App() {
@@ -8,7 +9,8 @@ function App() {
   return (
     <>
       <h1>Hello you Sexy beast</h1>
-      <div>
+      <div className="gadget-container">
+        <Notes />
         <CalendarBox />
       </div>
     </>
