@@ -1,6 +1,10 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
 use serde::{Serialize};
 
+mod api;
+mod models;
+mod repository;
+
 #[derive(Serialize)]
 pub struct Response {
     pub message: String,
@@ -14,7 +18,6 @@ async fn healthcheck() -> impl Responder {
     HttpResponse::Ok().json(response)
 }
 
-
 async fn not_found() -> Result<HttpResponse> {
     let response = Response {
         message: "Resource not found".to_string(),
@@ -24,7 +27,17 @@ async fn not_found() -> Result<HttpResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(healthcheck).default_service(web::route().to(not_found)))
+    let calendar_db = repository::database::Database::new();
+    let app_data = web::Data::new(calendar_db);
+
+    HttpServer::new(move ||
+        App::new()
+            .app_data(app_data.clone())
+            .configure(api::todos::config)
+            .service(healthcheck)
+            .default_service(web::route().to(not_found))
+            .wrap(actix_web::middleware::Logger::default())
+    )
         .bind(("127.0.0.1", 8080))?
         .run()
         .await
