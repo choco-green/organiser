@@ -1,0 +1,13 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "api"
+path = "src/lib.rs"
+
+[dependencies]
+entity = { path = "../entity" }
+migration = { path = "../migration" }
