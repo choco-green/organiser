@@ -1,16 +1,36 @@
-import * as React from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useState } from 'react';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { format } from 'date-fns';
+import './Calendar.css';
+
+
 
 const Calendar = () => {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-       <DateCalendar value={value} onChange={(newValue) => setValue(newValue)} />
+    <div className="calendar-container">
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <StaticDatePicker
+        label="Select Date"
+        value={selectedDate}
+        onChange={handleDateChange}
+        disablePast
+        openTo="day"
+        renderInput={(params) => <TextField {...params} />}
+        renderDay={(day, _value) => (
+          <>{format(day, 'dd')}</> 
+        )}
+      />
     </LocalizationProvider>
+    </div>
   );
-}
+};
 
 export default Calendar;
