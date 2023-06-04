@@ -4,6 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { format } from 'date-fns';
 import './Calendar.css';
+import { TextField } from '@mui/material';
 
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -21,8 +22,8 @@ const Calendar = () => {
         onChange={handleDateChange}
         disablePast
         openTo="day"
-        renderInput={(params) => <TextField {...params} />}
-        renderDay={(day, _value) => (
+        renderInput={(params: any) => <TextField {...params} />}
+        renderDay={(day: number | Date, _value: any) => (
           <>{format(day, 'dd')}</> 
         )}
       />
