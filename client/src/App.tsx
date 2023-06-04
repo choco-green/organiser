@@ -1,19 +1,25 @@
 import { useState } from 'react'
-import CalendarBox from './Gadgets/Calendar/Calendar'
 import Notes from './Gadgets/Notes/Notes'
 import './App.css'
 import Calendar from './Gadgets/Calendar/Calendar'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
+    <div className="background">
+      <div className="title">
       <h1>Hello you Sexy beast</h1>
-      <div className="gadget-container">
+      </div>
+      <div className="gadgets">
+      <div className="notes">
         <Notes />
+      </div>
+      <div className="calendar">
         <Calendar />
       </div>
+      </div>
+    </div>
     </>
   )
 }

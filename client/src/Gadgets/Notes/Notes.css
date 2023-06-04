@@ -1,12 +1,16 @@
 .notes-container {
-    max-width: 400px;
+    max-width: 280px;
     margin: 0 auto;
+    background-color: white;
+    margin-top: 20px;
   }
   
   .notes-header {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    padding: 12px;
   }
   
   .notes-list {
@@ -17,9 +21,9 @@
   .note-item {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 1px;
   }
   
   .note-item span {
-    margin-right: 8px;
+    margin-right: 6px;
   }

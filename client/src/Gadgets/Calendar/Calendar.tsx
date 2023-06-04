@@ -5,8 +5,6 @@ import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { format } from 'date-fns';
 import './Calendar.css';
 
-
-
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 

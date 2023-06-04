@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IconButton, TextField } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import './Notes.css';
-
 interface Note {
   id: number;
   content: string;
