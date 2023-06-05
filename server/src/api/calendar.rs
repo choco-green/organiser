@@ -4,10 +4,17 @@ use serde_json::json;
 
 use crate::{entity::prelude::{Calendar, User}, AppState};
 
-#[get("/calendar/{id}")]
-pub async fn get_calendar(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
+#[get("/calendar/user/{userId}")]
+pub async fn get_calendar(path: Option<web::Path<i32>>, data: web::Data<AppState>) -> impl Responder {
+    let id = match path {
+        Some(path) => path.into_inner(),
+        None => return HttpResponse::InternalServerError()
+            .json(json!({
+                "status": "error", "message": "User ID failed to parse"
+            })),
+    };
+
     let conn = &data.db;
-    let id = path.into_inner();
 
     let user = User::find_by_id(id)
         .one(conn)
