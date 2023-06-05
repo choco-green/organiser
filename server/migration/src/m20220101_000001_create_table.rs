@@ -12,23 +12,45 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(User::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(User::UserId)
-                        .integer().not_null().auto_increment().primary_key()
+                    .col(
+                        ColumnDef::new(User::UserId)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
                     )
-                    .col(ColumnDef::new(User::UserName)
-                        .string().not_null().unique_key()
+                    .col(
+                        ColumnDef::new(User::UserName)
+                            .string()
+                            .not_null()
+                            .unique_key(),
                     )
-                    .col(ColumnDef::new(User::UserMobile)
-                        .string().not_null().unique_key()
+                    .col(
+                        ColumnDef::new(User::UserMobile)
+                            .string()
+                            .not_null()
+                            .unique_key(),
                     )
-                    .col(ColumnDef::new(User::UserEmail)
-                        .string().not_null().unique_key()
+                    .col(
+                        ColumnDef::new(User::UserEmail)
+                            .string()
+                            .not_null()
+                            .unique_key(),
                     )
                     .col(ColumnDef::new(User::UserPassword).string().not_null())
-                    .col(ColumnDef::new(User::UserCreatedAt).timestamp_with_time_zone().not_null())
-                    .col(ColumnDef::new(User::UserUpdatedAt).timestamp_with_time_zone().not_null())
-                    .to_owned()
-            ).await?;
+                    .col(
+                        ColumnDef::new(User::UserCreatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(User::UserUpdatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .to_owned(),
+            )
+            .await?;
 
         // Creates index for user table
         manager
@@ -40,51 +62,84 @@ impl MigrationTrait for Migration {
                     .col(User::UserName)
                     .col(User::UserMobile)
                     .col(User::UserEmail)
-                    .to_owned()
-            ).await?;
+                    .to_owned(),
+            )
+            .await?;
 
         // Creates calendar table
         manager
             .create_table(
                 Table::create()
-                .table(Calendar::Table)
-                .if_not_exists()
-                .col(ColumnDef::new(Calendar::CalendarId)
-                    .integer().not_null().auto_increment().primary_key()
-                )
-                .col(ColumnDef::new(Calendar::UserId).integer().not_null())
-                .col(ColumnDef::new(Calendar::CalendarTitle).string().not_null())
-                .col(ColumnDef::new(Calendar::CalendarDescription).string())
-                .col(ColumnDef::new(Calendar::CalendarDefaultEventColour)
-                    .string().not_null()
-                )
-                .col(ColumnDef::new(Calendar::CalendarNotification)
-                    .boolean().not_null().default(true)
-                )
-                .col(ColumnDef::new(Calendar::CalendarCreatedAt).timestamp_with_time_zone().not_null())
-                .col(ColumnDef::new(Calendar::CalendarUpdatedAt).timestamp_with_time_zone().not_null())
-                .to_owned() 
-            ).await?;
-        
+                    .table(Calendar::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(Calendar::CalendarId)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(ColumnDef::new(Calendar::UserId).integer().not_null())
+                    .col(ColumnDef::new(Calendar::CalendarTitle).string().not_null())
+                    .col(ColumnDef::new(Calendar::CalendarDescription).string())
+                    .col(
+                        ColumnDef::new(Calendar::CalendarDefaultEventColour)
+                            .string()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Calendar::CalendarNotification)
+                            .boolean()
+                            .not_null()
+                            .default(true),
+                    )
+                    .col(
+                        ColumnDef::new(Calendar::CalendarCreatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Calendar::CalendarUpdatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
         // Create Event table
         manager
-            .create_table(Table::create()
-                .table(Event::Table)
-                .if_not_exists()
-                .col(ColumnDef::new(Event::EventId)
-                    .integer().not_null().auto_increment().primary_key()
-                )
-                .col(ColumnDef::new(Event::CalendarId).integer().not_null())
-                .col(ColumnDef::new(Event::EventTitle).string().not_null())
-                .col(ColumnDef::new(Event::EventDescription).string())
-                .col(ColumnDef::new(Event::EventLocation).string())
-                .col(ColumnDef::new(Event::EventColour).string().not_null())
-                .col(ColumnDef::new(Event::EventStartTime).date_time().not_null())
-                .col(ColumnDef::new(Event::EventEndTime).date_time().not_null())
-                .col(ColumnDef::new(Event::EventCreatedAt).timestamp_with_time_zone().not_null())
-                .col(ColumnDef::new(Event::EventUpdatedAt).timestamp_with_time_zone().not_null())
-                .to_owned()
-            ).await?;
+            .create_table(
+                Table::create()
+                    .table(Event::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(Event::EventId)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(ColumnDef::new(Event::CalendarId).integer().not_null())
+                    .col(ColumnDef::new(Event::EventTitle).string().not_null())
+                    .col(ColumnDef::new(Event::EventDescription).string())
+                    .col(ColumnDef::new(Event::EventLocation).string())
+                    .col(ColumnDef::new(Event::EventColour).string().not_null())
+                    .col(ColumnDef::new(Event::EventStartTime).date_time().not_null())
+                    .col(ColumnDef::new(Event::EventEndTime).date_time().not_null())
+                    .col(
+                        ColumnDef::new(Event::EventCreatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Event::EventUpdatedAt)
+                            .timestamp_with_time_zone()
+                            .not_null(),
+                    )
+                    .to_owned(),
+            )
+            .await?;
 
         // Creates calendar table foreign key
         manager
@@ -95,8 +150,9 @@ impl MigrationTrait for Migration {
                     .to(User::Table, User::UserId)
                     .on_delete(ForeignKeyAction::Cascade)
                     .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()
-            ).await?;
+                    .to_owned(),
+            )
+            .await?;
 
         // Create Event table foreign key
         manager
@@ -107,9 +163,10 @@ impl MigrationTrait for Migration {
                     .to(Calendar::Table, Calendar::CalendarId)
                     .on_delete(ForeignKeyAction::Cascade)
                     .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()
-            ).await?;
-    
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 

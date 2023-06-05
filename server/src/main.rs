@@ -1,5 +1,5 @@
-use actix_web::{HttpServer, web, App};
-use sea_orm::{DatabaseConnection, Database};
+use actix_web::{web, App, HttpServer};
+use sea_orm::{Database, DatabaseConnection};
 
 mod api;
 mod entity;
@@ -12,14 +12,13 @@ pub struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db: DatabaseConnection = Database::connect(
-        "postgres://superuser:superpassword@localhost/organiser"
-    )
-    .await
-    .unwrap();
+    let db: DatabaseConnection =
+        Database::connect("postgres://superuser:superpassword@localhost/organiser")
+            .await
+            .unwrap();
 
     let state = AppState { db };
-    
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(state.clone()))
@@ -30,4 +29,4 @@ async fn main() -> std::io::Result<()> {
     .await?;
 
     Ok(())
-}   
+}
