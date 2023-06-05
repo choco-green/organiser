@@ -5,3 +5,15 @@
     gap: 8px;
 }
 
+.day {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3f51b5
+}
+
+.event {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666666;
+}
+
