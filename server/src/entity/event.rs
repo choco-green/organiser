@@ -6,18 +6,16 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "event")]
 pub struct Model {
     #[sea_orm(primary_key)]
-    pub id: i32,
-    #[sea_orm(unique)]
+    pub event_id: i32,
     pub calendar_id: i32,
-    pub title: String,
-    pub description: Option<String>,
-    pub location: Option<String>,
+    pub event_title: String,
+    pub event_description: Option<String>,
+    pub event_location: Option<String>,
     pub event_colour: String,
-    pub start_time: DateTime,
-    pub end_time: DateTime,
-    pub time_zone: Option<String>,
-    pub event_created_at: DateTime,
-    pub event_updated_at: DateTime,
+    pub event_start_time: DateTime,
+    pub event_end_time: DateTime,
+    pub event_created_at: DateTimeWithTimeZone,
+    pub event_updated_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -25,7 +23,7 @@ pub enum Relation {
     #[sea_orm(
         belongs_to = "super::calendar::Entity",
         from = "Column::CalendarId",
-        to = "super::calendar::Column::Id",
+        to = "super::calendar::Column::CalendarId",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]

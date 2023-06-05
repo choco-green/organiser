@@ -12,21 +12,21 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(User::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(User::Id)
+                    .col(ColumnDef::new(User::UserId)
                         .integer().not_null().auto_increment().primary_key()
                     )
-                    .col(ColumnDef::new(User::Username)
+                    .col(ColumnDef::new(User::UserName)
                         .string().not_null().unique_key()
                     )
-                    .col(ColumnDef::new(User::Mobile)
+                    .col(ColumnDef::new(User::UserMobile)
                         .string().not_null().unique_key()
                     )
-                    .col(ColumnDef::new(User::Email)
+                    .col(ColumnDef::new(User::UserEmail)
                         .string().not_null().unique_key()
                     )
-                    .col(ColumnDef::new(User::PasswordHash).string().not_null())
-                    .col(ColumnDef::new(User::UserCreatedAt).date_time().not_null())
-                    .col(ColumnDef::new(User::UserUpdatedAt).date_time().not_null())
+                    .col(ColumnDef::new(User::UserPassword).string().not_null())
+                    .col(ColumnDef::new(User::UserCreatedAt).timestamp_with_time_zone().not_null())
+                    .col(ColumnDef::new(User::UserUpdatedAt).timestamp_with_time_zone().not_null())
                     .to_owned()
             ).await?;
 
@@ -37,9 +37,9 @@ impl MigrationTrait for Migration {
                     .name("idx_user")
                     .table(User::Table)
                     .if_not_exists()
-                    .col(User::Username)
-                    .col(User::Mobile)
-                    .col(User::Email)
+                    .col(User::UserName)
+                    .col(User::UserMobile)
+                    .col(User::UserEmail)
                     .to_owned()
             ).await?;
 
@@ -49,21 +49,20 @@ impl MigrationTrait for Migration {
                 Table::create()
                 .table(Calendar::Table)
                 .if_not_exists()
-                .col(ColumnDef::new(Calendar::Id)
+                .col(ColumnDef::new(Calendar::CalendarId)
                     .integer().not_null().auto_increment().primary_key()
                 )
                 .col(ColumnDef::new(Calendar::UserId).integer().not_null())
-                .col(ColumnDef::new(Calendar::Title).string().not_null())
-                .col(ColumnDef::new(Calendar::Description).string())
-                .col(ColumnDef::new(Calendar::DefaultEventColour)
+                .col(ColumnDef::new(Calendar::CalendarTitle).string().not_null())
+                .col(ColumnDef::new(Calendar::CalendarDescription).string())
+                .col(ColumnDef::new(Calendar::CalendarDefaultEventColour)
                     .string().not_null()
                 )
-                .col(ColumnDef::new(Calendar::Notification)
+                .col(ColumnDef::new(Calendar::CalendarNotification)
                     .boolean().not_null().default(true)
                 )
-                .col(ColumnDef::new(Calendar::TimeZone).string())
-                .col(ColumnDef::new(Calendar::CalendarCreatedAt).date_time().not_null())
-                .col(ColumnDef::new(Calendar::CalendarUpdatedAt).date_time().not_null())
+                .col(ColumnDef::new(Calendar::CalendarCreatedAt).timestamp_with_time_zone().not_null())
+                .col(ColumnDef::new(Calendar::CalendarUpdatedAt).timestamp_with_time_zone().not_null())
                 .to_owned() 
             ).await?;
         
@@ -72,19 +71,18 @@ impl MigrationTrait for Migration {
             .create_table(Table::create()
                 .table(Event::Table)
                 .if_not_exists()
-                .col(ColumnDef::new(Event::Id)
+                .col(ColumnDef::new(Event::EventId)
                     .integer().not_null().auto_increment().primary_key()
                 )
                 .col(ColumnDef::new(Event::CalendarId).integer().not_null())
-                .col(ColumnDef::new(Event::Title).string().not_null())
-                .col(ColumnDef::new(Event::Description).string())
-                .col(ColumnDef::new(Event::Location).string())
+                .col(ColumnDef::new(Event::EventTitle).string().not_null())
+                .col(ColumnDef::new(Event::EventDescription).string())
+                .col(ColumnDef::new(Event::EventLocation).string())
                 .col(ColumnDef::new(Event::EventColour).string().not_null())
-                .col(ColumnDef::new(Event::StartTime).date_time().not_null())
-                .col(ColumnDef::new(Event::EndTime).date_time().not_null())
-                .col(ColumnDef::new(Event::TimeZone).string())
-                .col(ColumnDef::new(Event::EventCreatedAt).date_time().not_null())
-                .col(ColumnDef::new(Event::EventUpdatedAt).date_time().not_null())
+                .col(ColumnDef::new(Event::EventStartTime).date_time().not_null())
+                .col(ColumnDef::new(Event::EventEndTime).date_time().not_null())
+                .col(ColumnDef::new(Event::EventCreatedAt).timestamp_with_time_zone().not_null())
+                .col(ColumnDef::new(Event::EventUpdatedAt).timestamp_with_time_zone().not_null())
                 .to_owned()
             ).await?;
 
@@ -94,7 +92,7 @@ impl MigrationTrait for Migration {
                 ForeignKey::create()
                     .name("fk_user_id")
                     .from(Calendar::Table, Calendar::UserId)
-                    .to(User::Table, User::Id)
+                    .to(User::Table, User::UserId)
                     .on_delete(ForeignKeyAction::Cascade)
                     .on_update(ForeignKeyAction::Cascade)
                     .to_owned()
@@ -106,7 +104,7 @@ impl MigrationTrait for Migration {
                 ForeignKey::create()
                     .name("fk_calendar_id")
                     .from(Event::Table, Event::CalendarId)
-                    .to(Calendar::Table, Calendar::Id)
+                    .to(Calendar::Table, Calendar::CalendarId)
                     .on_delete(ForeignKeyAction::Cascade)
                     .on_update(ForeignKeyAction::Cascade)
                     .to_owned()
@@ -133,11 +131,11 @@ impl MigrationTrait for Migration {
 #[derive(Iden)]
 enum User {
     Table,
-    Id,
-    Username,
-    Mobile,
-    Email,
-    PasswordHash,
+    UserId,
+    UserName,
+    UserMobile,
+    UserEmail,
+    UserPassword,
     UserCreatedAt,
     UserUpdatedAt,
 }
@@ -145,13 +143,12 @@ enum User {
 #[derive(Iden)]
 enum Calendar {
     Table,
-    Id,
+    CalendarId,
     UserId,
-    Title,
-    Description,
-    DefaultEventColour,
-    Notification,
-    TimeZone,
+    CalendarTitle,
+    CalendarDescription,
+    CalendarDefaultEventColour,
+    CalendarNotification,
     CalendarCreatedAt,
     CalendarUpdatedAt,
 }
@@ -159,15 +156,14 @@ enum Calendar {
 #[derive(Iden)]
 enum Event {
     Table,
-    Id,
+    EventId,
     CalendarId,
-    Title,
-    Description,
-    Location,
+    EventTitle,
+    EventDescription,
+    EventLocation,
     EventColour,
-    StartTime,
-    EndTime,
-    TimeZone,
+    EventStartTime,
+    EventEndTime,
     EventCreatedAt,
     EventUpdatedAt,
 }
