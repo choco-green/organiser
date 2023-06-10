@@ -17,7 +17,7 @@ pub struct Model {
     pub calendar_updated_at: DateTimeWithTimeZone,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation, Serialize)]
 pub enum Relation {
     #[sea_orm(has_many = "super::event::Entity")]
     Event,

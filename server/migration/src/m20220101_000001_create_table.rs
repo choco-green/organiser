@@ -19,8 +19,9 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
+                    .col(ColumnDef::new(User::UserName).string().not_null())
                     .col(
-                        ColumnDef::new(User::UserName)
+                        ColumnDef::new(User::UserUsername)
                             .string()
                             .not_null()
                             .unique_key(),
@@ -38,6 +39,12 @@ impl MigrationTrait for Migration {
                             .unique_key(),
                     )
                     .col(ColumnDef::new(User::UserPassword).string().not_null())
+                    .col(
+                        ColumnDef::new(User::UserVerified)
+                            .boolean()
+                            .not_null()
+                            .default(false),
+                    )
                     .col(
                         ColumnDef::new(User::UserCreatedAt)
                             .timestamp_with_time_zone()
@@ -59,7 +66,7 @@ impl MigrationTrait for Migration {
                     .name("idx_user")
                     .table(User::Table)
                     .if_not_exists()
-                    .col(User::UserName)
+                    .col(User::UserUsername)
                     .col(User::UserMobile)
                     .col(User::UserEmail)
                     .to_owned(),
@@ -190,9 +197,11 @@ enum User {
     Table,
     UserId,
     UserName,
+    UserUsername,
     UserMobile,
     UserEmail,
     UserPassword,
+    UserVerified,
     UserCreatedAt,
     UserUpdatedAt,
 }
